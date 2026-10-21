@@ -1,0 +1,46 @@
+{
+  "labName": "Sun Lab",
+  "research": [],
+  "members": [],
+  "resources": [
+    {
+      "id": "human",
+      "title": "Human",
+      "zh": "人单细胞资源",
+      "species": "Homo sapiens",
+      "category": "human",
+      "status": "in_preparation",
+      "description": "Project scope, atlas and datasets will be added here.",
+      "descriptionZh": "项目介绍、细胞图谱与数据集将在后续补充。",
+      "externalUrl": null,
+      "downloads": [],
+      "publicationUrl": null
+    },
+    {
+      "id": "tree-shrew",
+      "title": "Tree shrew",
+      "zh": "树鼩单细胞资源",
+      "species": "Tree shrew · 树鼩",
+      "category": "tree-shrew",
+      "status": "in_preparation",
+      "description": "Project scope, atlas and datasets will be added here.",
+      "descriptionZh": "项目介绍、细胞图谱与数据集将在后续补充。",
+      "externalUrl": null,
+      "downloads": [],
+      "publicationUrl": null
+    },
+    {
+      "id": "cross-species",
+      "title": "Cross-species",
+      "zh": "跨物种比较资源",
+      "species": "Comparative single-cell biology",
+      "category": "cross-species",
+      "status": "in_preparation",
+      "description": "Species coverage, comparative atlas and datasets will be added here.",
+      "descriptionZh": "物种范围、比较图谱与数据集将在后续补充。",
+      "externalUrl": null,
+      "downloads": [],
+      "publicationUrl": null
+    }
+  ]
+}
