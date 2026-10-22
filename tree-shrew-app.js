@@ -14,7 +14,7 @@ function setStatus(message, state = 'ready') {
 }
 function readyStatus() {
   setStatus(`${active.size} signal track${active.size === 1 ? '' : 's'} active`);
-  $('#active-summary').textContent = active.size ? `${active.size} visible cell type${active.size === 1 ? '' : 's'} · original bigWig signals` : 'No signal tracks selected';
+  $('#active-summary').textContent = active.size ? `${active.size} visible cell type${active.size === 1 ? '' : 's'} · cluster CPM signals` : 'No signal tracks selected';
 }
 function syncRegion() {
   if (!browser) return;
@@ -56,7 +56,7 @@ function renderTracks() {
       const color = document.createElement('i'); color.className = 'track-color'; color.style.background = t.color;
       name.append(color, document.createTextNode(t.name));
       const detail = document.createElement('small');
-      detail.textContent = `${t.id} · ${t.local ? 'Session file' : 'bigWig · TS_3.0'}`;
+      detail.textContent = `${t.id} · ${t.local ? 'Session file' : 'bigWig · '+manifest.assembly}`;
       info.append(name, detail); label.append(input, info); box.append(label);
     }
   }
@@ -71,7 +71,7 @@ function signalConfig(t) {
   config.removable = false; config.min = 0;
   const mode = $('#scale-mode').value;
   config.autoscale = mode !== 'fixed';
-  if (mode === 'shared') config.autoscaleGroup = 'tree-shrew-visible-signals';
+  if (mode === 'shared') config.autoscaleGroup = manifest.resourceId+'-visible-signals';
   if (mode === 'fixed') config.max = Number($('#scale-max').value);
   return config;
 }
@@ -93,7 +93,7 @@ async function changeTracks(action) {
   finally { changingTracks = false; renderTracks(); }
 }
 $('#cell-search').oninput = renderTracks;
-$('#select-all').onclick = () => changeTracks(async () => { for (const t of tracks) await addTrack(t); });
+$('#select-all').onclick = () => changeTracks(async () => { const q=$('#cell-search').value.toLowerCase(); for (const t of tracks.filter(t=>`${t.id} ${t.name} ${t.group}`.toLowerCase().includes(q))) await addTrack(t); });
 $('#clear-all').onclick = () => changeTracks(async () => { for (const t of tracks) removeTrack(t); });
 
 function locusForGene(g) {
@@ -108,11 +108,11 @@ function resolveQuery(query) {
   if (m) {
     const chr = Object.keys(manifest.chromosomes).find(c => c.toLowerCase() === m[1].toLowerCase());
     const start = Number(m[2]), end = Number(m[3]);
-    if (!chr) throw Error('This sequence is not present in the TS_3.0 reference.');
+    if (!chr) throw Error('This sequence is not present in the '+manifest.assembly+' reference.');
     if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 1 || end <= start || end > manifest.chromosomes[chr]) throw Error('Coordinates must be within this reference sequence, with start smaller than end.');
     return `${chr}:${start}-${end}`;
   }
-  throw Error('Gene not found. Use a symbol or gene ID from this TS_3.0 annotation, or enter coordinates such as chr4:110948574-111045013.');
+  throw Error('Gene not found. Use a gene from the '+manifest.assembly+' annotation, or valid genomic coordinates.');
 }
 async function navigate(query, selectedGene) {
   if (!browser || navigating || changingTracks) return;
@@ -154,7 +154,7 @@ async function applyScale() {
   await changeTracks(async () => {
     const mode = $('#scale-mode').value;
     for (const loaded of active.values()) {
-      loaded.autoscaleGroup = mode === 'shared' ? 'tree-shrew-visible-signals' : undefined;
+      loaded.autoscaleGroup = mode === 'shared' ? manifest.resourceId+'-visible-signals' : undefined;
       loaded.autoscale = mode !== 'fixed';
       if (mode === 'fixed') loaded.dataRange = {min:0, max};
     }
@@ -171,7 +171,7 @@ function download(content, filename, type) {
 }
 $('#export-svg').onclick = () => {
   if (!browser) return;
-  try { const svg = browser.toSVG(); if (typeof svg !== 'string' || !svg.includes('<svg')) throw Error('Invalid SVG output'); download(svg, 'tree-shrew-TS_3.0-tracks.svg', 'image/svg+xml'); }
+  try { const svg = browser.toSVG(); if (typeof svg !== 'string' || !svg.includes('<svg')) throw Error('Invalid SVG output'); download(svg, manifest.resourceId+'-'+manifest.assembly+'-tracks.svg', 'image/svg+xml'); }
   catch (error) { notice('The view could not be exported: ' + error.message); }
 };
 $('#share-locus').onclick = async () => {
@@ -189,26 +189,27 @@ $('#local-files').onchange = async event => {
   const files = [...event.target.files];
   await changeTracks(async () => {
     for (const file of files) {
-      if (!/\.(bw|bigwig)$/i.test(file.name)) throw Error('Choose a .bw or .bigWig file aligned to TS_3.0.');
+      if (!/\.(bw|bigwig)$/i.test(file.name)) throw Error('Choose a .bw or .bigWig file aligned to '+manifest.assembly+'.');
       const t = {id:'LOCAL-' + (tracks.filter(t => t.local).length + 1), name:file.name.replace(/\.(bw|bigwig)$/i,''), url:file, group:'Added this session', local:true, type:'wig', format:'bigwig', color:'#8d80b1', height:140, order:tracks.length + 1};
       tracks.push(t); await addTrack(t);
     }
   });
   event.target.value = '';
 };
-async function getJSON(url) { const r = await fetch(url); if (!r.ok) throw Error('Data connection unavailable (' + r.status + ').'); return r.json(); }
+async function getJSON(url) { const r = await fetch(url, {cache:'no-cache'}); if (!r.ok) throw Error('Data connection unavailable (' + r.status + ').'); return r.json(); }
 async function init() {
   $('#go').disabled = true;
   try {
     manifest = await getJSON('tree-shrew-dataset.json');
-    genes = await getJSON(manifest.geneIndex);
+    const index = await getJSON(manifest.geneIndex);
+    genes = (Array.isArray(index)?index:Object.values(index)).map(g=>({...g,id:g.id||g.name}));
     for (const g of genes) for (const key of new Set([g.name.toUpperCase(), g.id.toUpperCase()])) {
       if (!geneLookup.has(key)) geneLookup.set(key, []); geneLookup.get(key).push(g);
     }
-    $('#gene-count').textContent = `${genes.length.toLocaleString()} annotated gene entries · TS_3.0`;
+    $('#gene-count').textContent = `${genes.length.toLocaleString()} annotated gene entries · ${manifest.assembly}`;
     tracks = manifest.tracks; renderTracks();
     const status = await getJSON(new URL('api/status', new URL(manifest.dataBase, location.href)));
-    if (!status.ready) throw Error('Tree shrew data are still being transferred. Please try again after the upload is complete.');
+    if (!status.ready) throw Error('Some atlas data are unavailable. Please try again later or contact the maintainer.');
     const params = new URL(location.href).searchParams;
     let locus = manifest.initialLocus;
     if (params.has('locus')) { try { locus = resolveQuery(params.get('locus')); } catch { notice('The shared region was invalid; showing the default cardiac locus.'); } }

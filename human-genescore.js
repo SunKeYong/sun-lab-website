@@ -1,9 +1,9 @@
-import {rankRows, formatValue, percentage, csvFor} from './genescore-core.js';
+import {rankRows, formatValue, percentage, csvFor} from './genescore-core.js?v=20261022-catalog';
 const $ = selector => document.querySelector(selector);
 let meta, base, result, loadingMeta, requestId = 0, currentController;
 const status = (message, error = false) => { $('#gs-status').textContent=message; $('#gs-status').classList.toggle('gs-error',error); };
 async function json(url, signal) {
-  const response = await fetch(url, {signal});
+  const response = await fetch(url, {signal,cache:'no-cache'});
   const data = await response.json();
   if (!response.ok) throw Error(data.error || 'Data connection unavailable. Please try again.');
   return data;
@@ -15,6 +15,7 @@ async function metadata() {
     const config = await json('human-dataset.json');
     base = new URL(config.dataBase || './', location.href);
     const value = await json(new URL('api/genescore/meta', base));
+    value.cellTypeLabels = config.cellTypeLabels || value.cellTypeLabels || {};
     $('#gs-dataset-count').textContent = `${value.cellTypeCount} subtypes · ${value.geneCount.toLocaleString('en')} genes`;
     $('#gs-methods-text').textContent = value.methods;
     $('#gs-coverage').textContent = `${value.cellTypeCount} subtypes · ${value.geneCount.toLocaleString('en')} genes`;
@@ -45,7 +46,10 @@ function render() {
   rows.forEach((row,index)=>{
     const tr=document.createElement('tr');
     const rank=document.createElement('td'); rank.textContent=index+1; rank.className='gs-rank';
-    const name=document.createElement('th'); name.scope='row'; name.textContent=row.id;
+    const name=document.createElement('th'); name.scope='row';
+    const cellId=document.createElement('strong');cellId.textContent=row.id;
+    const cellName=document.createElement('span');cellName.className='gs-cell-name';cellName.textContent=row.name || row.id;
+    name.append(cellId,cellName);
     const mean=document.createElement('td'); const meanWrap=document.createElement('div'); meanWrap.className='gs-bar-cell';
     const track=document.createElement('span'); track.className='gs-bar-track';
     const bar=document.createElement('i'); bar.className='gs-mean-bar'; bar.style.width=(maximum ? row.mean/maximum*100 : 0)+'%'; track.append(bar);
@@ -68,9 +72,10 @@ async function search(query) {
     const gene=query.trim(); if (!gene) throw Error('Enter a gene symbol, or choose an example.');
     const url=new URL('api/genescore',base);url.searchParams.set('gene',gene);
     const data=await json(url,signal);if(id!==requestId)return;
+    data.rows=data.rows.map(row=>({...row,name:meta.cellTypeLabels[row.id] || row.name || row.id}));
     result=data;$('#gs-gene').value=data.gene;$('#gs-result-gene').textContent=data.gene;
     $('#gs-filter').value='';
-    const top=rankRows(data.rows)[0];$('#gs-top-id').textContent=top.id;$('#gs-top-value').textContent=`${formatValue(top.mean)} mean GeneScore · ${percentage(top.fraction)} cells with signal`;
+    const top=rankRows(data.rows)[0];$('#gs-top-id').textContent=top.id+' · '+top.name;$('#gs-top-value').textContent=`${formatValue(top.mean)} mean GeneScore · ${percentage(top.fraction)} cells with signal`;
     render();$('#gs-results').hidden=false;$('.gs-chart-scroll').scrollTop=0;
     status(`Showing ${data.gene} across all ${data.rows.length} subtypes. Values are supplied normalized ATAC GeneScores.`);
     const shared=new URL(location.href);shared.searchParams.set('scoreGene',data.gene);history.replaceState(null,'',shared);
@@ -97,18 +102,20 @@ $('#gs-export-csv').onclick=()=>{if(result)download(csvFor(visibleRows(),result.
 $('#gs-export-svg').onclick=()=>{
   if(!result)return;
   const rows=visibleRows(),height=110+rows.length*25,svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  svg.setAttribute('xmlns','http://www.w3.org/2000/svg');svg.setAttribute('viewBox',`0 0 1000 ${height}`);svg.setAttribute('width','1000');svg.setAttribute('height',height);
+  svg.setAttribute('xmlns','http://www.w3.org/2000/svg');svg.setAttribute('viewBox',`0 0 1900 ${height}`);svg.setAttribute('width','1900');svg.setAttribute('height',height);
   function el(tag,attributes,text){const node=document.createElementNS(svg.namespaceURI,tag);Object.entries(attributes).forEach(([k,v])=>node.setAttribute(k,v));if(text!==undefined)node.textContent=text;svg.append(node);}
-  el('rect',{width:1000,height,fill:'white'});
+  el('rect',{width:1900,height,fill:'white'});
   el('text',{x:30,y:30,'font-size':20,'font-family':'Arial',fill:'#23334f'},`${meta.species} · ${result.gene} · ATAC GeneScore`);
-  el('text',{x:30,y:57,'font-size':12,'font-family':'Arial',fill:'#667085'},'Subtype                 Mean GeneScore (provided normalized values)                       Cells with signal (%)');
+  el('text',{x:30,y:57,'font-size':12,'font-family':'Arial',fill:'#667085'},'Subtype / cell type');
+  el('text',{x:1030,y:57,'font-size':12,'font-family':'Arial',fill:'#667085'},'Mean GeneScore (provided normalized values)');
+  el('text',{x:1640,y:57,'font-size':12,'font-family':'Arial',fill:'#667085'},'Cells with signal (%)');
   const maximum=Math.max(0,...result.rows.map(row=>row.mean));
   rows.forEach((row,index)=>{const y=80+index*25;
-    el('text',{x:30,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},row.id);
-    el('rect',{x:155,y,width:maximum?row.mean/maximum*500:0,height:15,fill:'#5c79ad'});
-    el('text',{x:670,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},formatValue(row.mean));
-    el('rect',{x:785,y,width:row.fraction*125,height:15,fill:'#d77b5a'});
-    el('text',{x:925,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},percentage(row.fraction));
+    el('text',{x:30,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},row.id+' · '+row.name);
+    el('rect',{x:1030,y,width:maximum?row.mean/maximum*500:0,height:15,fill:'#5c79ad'});
+    el('text',{x:1545,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},formatValue(row.mean));
+    el('rect',{x:1640,y,width:row.fraction*125,height:15,fill:'#d77b5a'});
+    el('text',{x:1780,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},percentage(row.fraction));
   });
   el('text',{x:30,y:height-12,'font-size':11,'font-family':'Arial',fill:'#667085'},'No additional log transformation or normalization. Percentage = supplied fraction × 100.');
   download(new XMLSerializer().serializeToString(svg),`${meta.species}-${result.gene}-genescore.svg`,'image/svg+xml');

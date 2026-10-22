@@ -34,16 +34,21 @@
       "species": "Homo sapiens",
       "category": "human",
       "status": "published",
-      "description": "Human hg38 track-browser preview with one cardiomyocyte signal track; the full 131-cell-type catalog is in preparation.",
+      "description": "Human hg38 atlas with 131 named cell-type bigWig tracks, simultaneous track comparison and ATAC GeneScore search.",
       "externalUrl": "https://sunkeyong.github.io/sun-lab-website/human-atlas.html",
       "downloads": [
         {
-          "url": "https://175.27.234.23/data/C6.2_Cardiomyocytes.bw",
-          "label": "Cardiomyocyte bigWig ↓"
+          "url": "https://sunkeyong.github.io/sun-lab-website/human-atlas.html#data",
+          "label": "Browse all 131 bigWig downloads ↗"
+        },
+        {
+          "url": "https://175.27.234.23/cell-types.csv",
+          "label": "Cell-type definitions CSV ↓"
         }
       ],
       "publicationUrl": null,
-      "atlasDescription": "Search genes or coordinates and explore the cardiomyocyte chromatin accessibility track."
+      "atlasDescription": "Compare multiple tracks from 131 cell types at shared genomic coordinates, search genes and explore subtype GeneScores.",
+      "downloadDescription": "All 131 cluster-exported bigWigs and the supplied cell-type definitions are available through the links below."
     },
     {
       "id": "tree-shrew",
@@ -51,21 +56,21 @@
       "species": "Tree shrew",
       "category": "tree-shrew",
       "status": "published",
-      "description": "Tree shrew TS_3.0 genome browser with simultaneous atrial and ventricular cardiomyocyte signal tracks.",
+      "description": "Tree shrew TS_3.0 atlas with 197 named cell-type bigWig tracks, simultaneous track comparison and ATAC GeneScore search.",
       "externalUrl": "https://sunkeyong.github.io/sun-lab-website/tree-shrew-atlas.html",
       "downloads": [
         {
-          "url": "https://175.27.234.23/tree-shrew/data/C3.1.Atria_cardiomyocytes.bw",
-          "label": "Atrial cardiomyocyte bigWig ↓"
+          "url": "https://sunkeyong.github.io/sun-lab-website/tree-shrew-atlas.html#data",
+          "label": "Browse all 197 bigWig downloads ↗"
         },
         {
-          "url": "https://175.27.234.23/tree-shrew/data/C3.2.Ventricular_cardiomyocytes.bw",
-          "label": "Ventricular cardiomyocyte bigWig ↓"
+          "url": "https://175.27.234.23/tree-shrew/cell-types.csv",
+          "label": "Cell-type definitions CSV ↓"
         }
       ],
       "publicationUrl": null,
-      "atlasDescription": "Compare both cell types at the same genomic coordinates, search tree shrew genes and explore transcript annotations.",
-      "downloadDescription": "Both cardiomyocyte signal tracks are available below. Additional datasets and metadata will follow."
+      "atlasDescription": "Compare multiple tracks from 197 cell types at shared genomic coordinates, search genes and explore subtype GeneScores.",
+      "downloadDescription": "All 197 cluster-exported bigWigs and the supplied cell-type definitions are available through the links below."
     },
     {
       "id": "cross-species",
