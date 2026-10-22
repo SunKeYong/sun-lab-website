@@ -1,0 +1,73 @@
+{
+  "species": "Homo sapiens",
+  "assembly": "hg38",
+  "name": "Human Cell Atlas",
+  "expectedCellTypes": 131,
+  "initialLocus": "chr14:23371990-23445660",
+  "reference": {
+    "id": "hg38",
+    "name": "Human \u00b7 GRCh38 / hg38",
+    "fastaURL": "https://175.27.234.23/data/hg38.fa",
+    "indexURL": "https://175.27.234.23/data/hg38.fa.fai",
+    "wholeGenomeView": true,
+    "chromosomeOrder": [
+      "chr1",
+      "chr2",
+      "chr3",
+      "chr4",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr13",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr20",
+      "chr21",
+      "chr22",
+      "chrX",
+      "chrY",
+      "chrM"
+    ]
+  },
+  "annotation": {
+    "name": "RefGene transcripts \u00b7 hg38",
+    "url": "human-transcripts.bed.gz",
+    "format": "bed",
+    "indexed": false,
+    "type": "annotation",
+    "displayMode": "EXPANDED",
+    "height": 180,
+    "color": "#6c7c9e",
+    "order": 1000,
+    "maxRows": 12
+  },
+  "geneIndex": "human-genes.json",
+  "tracks": [
+    {
+      "id": "C6.2",
+      "name": "Cardiomyocytes",
+      "filename": "C6.2_Cardiomyocytes.bw",
+      "url": "https://175.27.234.23/data/C6.2_Cardiomyocytes.bw",
+      "group": "Muscle",
+      "color": "#d77b5a",
+      "format": "bigwig",
+      "type": "wig",
+      "height": 180,
+      "autoscale": true,
+      "min": 0,
+      "order": 1,
+      "normalization": "Not specified",
+      "defaultVisible": true
+    }
+  ],
+  "dataBase": "https://175.27.234.23/"
+}

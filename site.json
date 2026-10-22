@@ -9,12 +9,20 @@
       "zh": "人单细胞资源",
       "species": "Homo sapiens",
       "category": "human",
-      "status": "in_preparation",
-      "description": "Project scope, atlas and datasets will be added here.",
-      "descriptionZh": "项目介绍、细胞图谱与数据集将在后续补充。",
-      "externalUrl": null,
-      "downloads": [],
-      "publicationUrl": null
+      "status": "published",
+      "description": "Human hg38 track-browser preview with one cardiomyocyte signal track; the full 131-cell-type catalog is in preparation.",
+      "descriptionZh": "人的 hg38 轨道浏览器演示，已接入一个心肌细胞信号轨道；完整 131 种细胞类型目录正在整理。",
+      "externalUrl": "https://sunkeyong.github.io/sun-lab-website/human-atlas.html",
+      "downloads": [
+        {
+          "url": "https://175.27.234.23/data/C6.2_Cardiomyocytes.bw",
+          "label": "Cardiomyocyte bigWig ↓",
+          "labelZh": "心肌细胞 bigWig 下载 ↓"
+        }
+      ],
+      "publicationUrl": null,
+      "atlasDescription": "Search genes or coordinates and explore the cardiomyocyte chromatin accessibility track.",
+      "atlasDescriptionZh": "搜索基因或坐标，浏览心肌细胞染色质可及性信号。"
     },
     {
       "id": "tree-shrew",
