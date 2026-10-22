@@ -34,7 +34,7 @@
       "species": "Homo sapiens",
       "category": "human",
       "status": "published",
-      "description": "Human hg38 atlas with 131 named cell-type bigWig tracks, simultaneous track comparison and ATAC GeneScore search.",
+      "description": "Explore cell-type-resolved chromatin accessibility in the human genome, compare signal tracks and search ATAC-derived GeneScores.",
       "externalUrl": "https://sunkeyong.github.io/sun-lab-website/human-atlas.html#overview",
       "downloads": [
         {
@@ -48,7 +48,23 @@
       ],
       "publicationUrl": null,
       "atlasDescription": "Compare multiple tracks from 131 cell types at shared genomic coordinates, search genes and explore subtype GeneScores.",
-      "downloadDescription": "All 131 cluster-exported bigWigs and the supplied cell-type definitions are available through the links below."
+      "downloadDescription": "All 131 cluster-exported bigWigs and the supplied cell-type definitions are available through the links below.",
+      "featured": true,
+      "cardTitle": "Human Chromatin Accessibility Atlas",
+      "label": "HUMAN ATLAS",
+      "icon": "species-human.svg",
+      "metrics": [
+        [
+          "131",
+          "Cell types"
+        ],
+        [
+          "hg38",
+          "Reference genome"
+        ]
+      ],
+      "details": "Multi-track comparison · ATAC GeneScore search",
+      "overview": "Cell-type-resolved human chromatin accessibility, with 131 named cell types on the hg38 reference genome."
     },
     {
       "id": "tree-shrew",
@@ -56,7 +72,7 @@
       "species": "Tree shrew",
       "category": "tree-shrew",
       "status": "published",
-      "description": "Tree shrew TS_3.0 atlas with 197 named cell-type bigWig tracks, simultaneous track comparison and ATAC GeneScore search.",
+      "description": "A single-cell atlas of tree shrew organogenesis, mapping cell-type-specific candidate cis-regulatory elements across three developmental stages.",
       "externalUrl": "https://sunkeyong.github.io/sun-lab-website/tree-shrew-atlas.html#overview",
       "downloads": [
         {
@@ -70,7 +86,27 @@
       ],
       "publicationUrl": null,
       "atlasDescription": "Compare multiple tracks from 197 cell types at shared genomic coordinates, search genes and explore subtype GeneScores.",
-      "downloadDescription": "All 197 cluster-exported bigWigs and the supplied cell-type definitions are available through the links below."
+      "downloadDescription": "All 197 cluster-exported bigWigs and the supplied cell-type definitions are available through the links below.",
+      "featured": true,
+      "cardTitle": "Tree Shrew Chromatin Accessibility During Organogenesis",
+      "label": "TOPA",
+      "icon": "species-tree-shrew.svg",
+      "metrics": [
+        [
+          "3.66M",
+          "Nuclei"
+        ],
+        [
+          "197",
+          "Cell types"
+        ],
+        [
+          "1.24M",
+          "Candidate CREs"
+        ]
+      ],
+      "details": "E23.5–E27.5 · SPATAC-seq · TS_3.0",
+      "overview": "TOPA profiles 3,656,332 nuclei from six whole embryos at E23.5, E25.5 and E27.5. It resolves 24 major cell classes and 197 cell types, and defines 1,238,436 candidate cis-regulatory elements."
     },
     {
       "id": "cross-species",
@@ -81,7 +117,8 @@
       "description": "Species coverage, comparative atlas and datasets will be added here.",
       "externalUrl": null,
       "downloads": [],
-      "publicationUrl": null
+      "publicationUrl": null,
+      "featured": false
     }
   ]
 }
