@@ -1,38 +1,57 @@
 {
   "labName": "Sun Lab",
   "research": [],
-  "members": [],
+  "members": [
+    {
+      "name": "Lei Chu",
+      "role": "Postdoctoral Fellow",
+      "education": "PhD in Immunology, China Pharmaceutical University",
+      "photo": "member-lei-chu.jpg"
+    },
+    {
+      "name": "Wanting Wang",
+      "role": "PhD Student",
+      "education": "Master’s degree, Xi’an Jiaotong University",
+      "photo": "member-wanting-wang.jpg"
+    },
+    {
+      "name": "Zijian Wang",
+      "role": "Master’s Student",
+      "education": "Bachelor’s degree in Biology, Hunan Normal University",
+      "photo": "member-zijian-wang.jpg"
+    },
+    {
+      "name": "Wenli Zou",
+      "role": "Research Assistant",
+      "education": "Master’s degree, Chongqing Medical University",
+      "photo": "member-wenli-zou.jpg"
+    }
+  ],
   "resources": [
     {
       "id": "human",
       "title": "Human",
-      "zh": "人单细胞资源",
       "species": "Homo sapiens",
       "category": "human",
       "status": "published",
       "description": "Human hg38 track-browser preview with one cardiomyocyte signal track; the full 131-cell-type catalog is in preparation.",
-      "descriptionZh": "人的 hg38 轨道浏览器演示，已接入一个心肌细胞信号轨道；完整 131 种细胞类型目录正在整理。",
       "externalUrl": "https://sunkeyong.github.io/sun-lab-website/human-atlas.html",
       "downloads": [
         {
           "url": "https://175.27.234.23/data/C6.2_Cardiomyocytes.bw",
-          "label": "Cardiomyocyte bigWig ↓",
-          "labelZh": "心肌细胞 bigWig 下载 ↓"
+          "label": "Cardiomyocyte bigWig ↓"
         }
       ],
       "publicationUrl": null,
-      "atlasDescription": "Search genes or coordinates and explore the cardiomyocyte chromatin accessibility track.",
-      "atlasDescriptionZh": "搜索基因或坐标，浏览心肌细胞染色质可及性信号。"
+      "atlasDescription": "Search genes or coordinates and explore the cardiomyocyte chromatin accessibility track."
     },
     {
       "id": "tree-shrew",
       "title": "Tree shrew",
-      "zh": "树鼩单细胞资源",
-      "species": "Tree shrew · 树鼩",
+      "species": "Tree shrew",
       "category": "tree-shrew",
       "status": "in_preparation",
       "description": "Project scope, atlas and datasets will be added here.",
-      "descriptionZh": "项目介绍、细胞图谱与数据集将在后续补充。",
       "externalUrl": null,
       "downloads": [],
       "publicationUrl": null
@@ -40,12 +59,10 @@
     {
       "id": "cross-species",
       "title": "Cross-species",
-      "zh": "跨物种比较资源",
       "species": "Comparative single-cell biology",
       "category": "cross-species",
       "status": "in_preparation",
       "description": "Species coverage, comparative atlas and datasets will be added here.",
-      "descriptionZh": "物种范围、比较图谱与数据集将在后续补充。",
       "externalUrl": null,
       "downloads": [],
       "publicationUrl": null
