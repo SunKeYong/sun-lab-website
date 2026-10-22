@@ -50,11 +50,22 @@
       "title": "Tree shrew",
       "species": "Tree shrew",
       "category": "tree-shrew",
-      "status": "in_preparation",
-      "description": "Project scope, atlas and datasets will be added here.",
-      "externalUrl": null,
-      "downloads": [],
-      "publicationUrl": null
+      "status": "published",
+      "description": "Tree shrew TS_3.0 genome browser with simultaneous atrial and ventricular cardiomyocyte signal tracks.",
+      "externalUrl": "https://sunkeyong.github.io/sun-lab-website/tree-shrew-atlas.html",
+      "downloads": [
+        {
+          "url": "https://175.27.234.23/tree-shrew/data/C3.1.Atria_cardiomyocytes.bw",
+          "label": "Atrial cardiomyocyte bigWig ↓"
+        },
+        {
+          "url": "https://175.27.234.23/tree-shrew/data/C3.2.Ventricular_cardiomyocytes.bw",
+          "label": "Ventricular cardiomyocyte bigWig ↓"
+        }
+      ],
+      "publicationUrl": null,
+      "atlasDescription": "Compare both cell types at the same genomic coordinates, search tree shrew genes and explore transcript annotations.",
+      "downloadDescription": "Both cardiomyocyte signal tracks are available below. Additional datasets and metadata will follow."
     },
     {
       "id": "cross-species",
