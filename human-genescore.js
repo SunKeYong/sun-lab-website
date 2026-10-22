@@ -105,19 +105,19 @@ $('#gs-export-svg').onclick=()=>{
   svg.setAttribute('xmlns','http://www.w3.org/2000/svg');svg.setAttribute('viewBox',`0 0 1900 ${height}`);svg.setAttribute('width','1900');svg.setAttribute('height',height);
   function el(tag,attributes,text){const node=document.createElementNS(svg.namespaceURI,tag);Object.entries(attributes).forEach(([k,v])=>node.setAttribute(k,v));if(text!==undefined)node.textContent=text;svg.append(node);}
   el('rect',{width:1900,height,fill:'white'});
-  el('text',{x:30,y:30,'font-size':20,'font-family':'Arial',fill:'#23334f'},`${meta.species} · ${result.gene} · ATAC GeneScore`);
-  el('text',{x:30,y:57,'font-size':12,'font-family':'Arial',fill:'#667085'},'Subtype / cell type');
-  el('text',{x:1030,y:57,'font-size':12,'font-family':'Arial',fill:'#667085'},'Mean GeneScore (provided normalized values)');
-  el('text',{x:1640,y:57,'font-size':12,'font-family':'Arial',fill:'#667085'},'Cells with signal (%)');
+  el('text',{x:30,y:30,'font-size':20,'font-family':'Arial',fill:'#000000'},`${meta.species} · ${result.gene} · ATAC GeneScore`);
+  el('text',{x:30,y:57,'font-size':12,'font-family':'Arial',fill:'#000000'},'Subtype / cell type');
+  el('text',{x:1030,y:57,'font-size':12,'font-family':'Arial',fill:'#000000'},'Mean GeneScore (provided normalized values)');
+  el('text',{x:1640,y:57,'font-size':12,'font-family':'Arial',fill:'#000000'},'Cells with signal (%)');
   const maximum=Math.max(0,...result.rows.map(row=>row.mean));
   rows.forEach((row,index)=>{const y=80+index*25;
-    el('text',{x:30,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},row.id+' · '+row.name);
+    el('text',{x:30,y:y+12,'font-size':12,'font-family':'Arial',fill:'#000000'},row.id+' · '+row.name);
     el('rect',{x:1030,y,width:maximum?row.mean/maximum*500:0,height:15,fill:'#5c79ad'});
-    el('text',{x:1545,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},formatValue(row.mean));
+    el('text',{x:1545,y:y+12,'font-size':12,'font-family':'Arial',fill:'#000000'},formatValue(row.mean));
     el('rect',{x:1640,y,width:row.fraction*125,height:15,fill:'#d77b5a'});
-    el('text',{x:1780,y:y+12,'font-size':12,'font-family':'Arial',fill:'#23334f'},percentage(row.fraction));
+    el('text',{x:1780,y:y+12,'font-size':12,'font-family':'Arial',fill:'#000000'},percentage(row.fraction));
   });
-  el('text',{x:30,y:height-12,'font-size':11,'font-family':'Arial',fill:'#667085'},'No additional log transformation or normalization. Percentage = supplied fraction × 100.');
+  el('text',{x:30,y:height-12,'font-size':11,'font-family':'Arial',fill:'#000000'},'No additional log transformation or normalization. Percentage = supplied fraction × 100.');
   download(new XMLSerializer().serializeToString(svg),`${meta.species}-${result.gene}-genescore.svg`,'image/svg+xml');
 };
 $('#gs-share').onclick=async()=>{if(!result)return;const url=new URL(location.href);url.searchParams.set('scoreGene',result.gene);url.hash='genescore';try{await navigator.clipboard.writeText(url.href);status('GeneScore link copied.');}catch{status('Share this profile: '+url.href);}};

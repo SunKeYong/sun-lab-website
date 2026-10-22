@@ -35,7 +35,7 @@
       "category": "human",
       "status": "published",
       "description": "Human hg38 atlas with 131 named cell-type bigWig tracks, simultaneous track comparison and ATAC GeneScore search.",
-      "externalUrl": "https://sunkeyong.github.io/sun-lab-website/human-atlas.html",
+      "externalUrl": "https://sunkeyong.github.io/sun-lab-website/human-atlas.html#overview",
       "downloads": [
         {
           "url": "https://sunkeyong.github.io/sun-lab-website/human-atlas.html#data",
@@ -57,7 +57,7 @@
       "category": "tree-shrew",
       "status": "published",
       "description": "Tree shrew TS_3.0 atlas with 197 named cell-type bigWig tracks, simultaneous track comparison and ATAC GeneScore search.",
-      "externalUrl": "https://sunkeyong.github.io/sun-lab-website/tree-shrew-atlas.html",
+      "externalUrl": "https://sunkeyong.github.io/sun-lab-website/tree-shrew-atlas.html#overview",
       "downloads": [
         {
           "url": "https://sunkeyong.github.io/sun-lab-website/tree-shrew-atlas.html#data",

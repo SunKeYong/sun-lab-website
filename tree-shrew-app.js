@@ -23,7 +23,7 @@ function syncRegion() {
   $('#current-region').textContent = (Array.isArray(loci) ? loci : [loci]).map(normalize).join(' ');
 }
 function activatePanel(name) {
-  if (!['tracks', 'genescore', 'overview', 'data'].includes(name)) name = 'tracks';
+  if (!['overview', 'tracks', 'genescore', 'data'].includes(name)) name = 'overview';
   document.querySelectorAll('.panel').forEach(el => el.hidden = el.id !== name + '-panel');
   document.querySelectorAll('[data-tab]').forEach(el => el.classList.toggle('active', el.dataset.tab === name));
   if (name === 'tracks' && browser) browser.visibilityChange();
@@ -31,7 +31,7 @@ function activatePanel(name) {
 document.querySelectorAll('[data-tab]').forEach(a => a.onclick = () => activatePanel(a.dataset.tab));
 document.querySelector('[data-open-tracks]').onclick = () => { location.hash = 'tracks'; activatePanel('tracks'); };
 window.addEventListener('hashchange', () => activatePanel(location.hash.slice(1)));
-activatePanel(location.hash.slice(1) || 'tracks');
+activatePanel(location.hash.slice(1) || 'overview');
 
 function renderTracks() {
   const box = $('#track-list');
@@ -227,7 +227,7 @@ async function init() {
     browser.on('locuschange', syncRegion); syncRegion(); $('#locus-input').value = params.get('locus') || manifest.initialLocus;
     const selected = params.has('tracks') ? params.get('tracks').split(',') : tracks.filter(t => t.defaultVisible).map(t => t.id);
     await changeTracks(async () => { for (const t of tracks.filter(t => selected.includes(t.id))) await addTrack(t); });
-    $('#go').disabled = false; renderTracks(); activatePanel(location.hash.slice(1) || 'tracks');
+    $('#go').disabled = false; renderTracks(); activatePanel(location.hash.slice(1) || 'overview');
   } catch (error) {
     console.error(error); setStatus('Connection unavailable', 'error'); notice(error.message || String(error));
     const loading = $('#browser-loading');
