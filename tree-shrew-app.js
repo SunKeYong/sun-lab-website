@@ -23,7 +23,7 @@ function syncRegion() {
   $('#current-region').textContent = (Array.isArray(loci) ? loci : [loci]).map(normalize).join(' ');
 }
 function activatePanel(name) {
-  if (!['tracks', 'overview', 'data'].includes(name)) name = 'tracks';
+  if (!['tracks', 'genescore', 'overview', 'data'].includes(name)) name = 'tracks';
   document.querySelectorAll('.panel').forEach(el => el.hidden = el.id !== name + '-panel');
   document.querySelectorAll('[data-tab]').forEach(el => el.classList.toggle('active', el.dataset.tab === name));
   if (name === 'tracks' && browser) browser.visibilityChange();
