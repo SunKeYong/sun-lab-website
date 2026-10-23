@@ -28,3 +28,6 @@ p{line-height:1.75;color:#000}a{color:#24577b}a:hover{color:#143e5d;text-decorat
 @media(max-width:380px){.lab-site .members-grid{grid-template-columns:1fr}.lab-site nav{gap:15px}.atlas-site .species-tag b{margin-left:5px}.lab-site .resource-stats{gap:10px}.lab-site .resource-stats strong{font-size:22px}}
 
 .lab-site .members{border-top:0;padding-top:0}.atlas-site .project-heading h1 span{display:none}
+/* Prevent legacy component font shorthands from reintroducing serif headings. */
+.lab-site :is(h1,h2,h3,h4,h5,h6,p,a,button,input,select,textarea,label,small,strong,th,td),.atlas-site :is(h1,h2,h3,h4,h5,h6,p,a,button,input,select,textarea,label,small,strong,th,td){font-family:var(--academic-font)!important}
+.atlas-site .locus-form button{background:#24577b;color:#fff;border-radius:3px}
