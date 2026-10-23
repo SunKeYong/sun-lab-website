@@ -51,7 +51,7 @@
       "downloadDescription": "All 131 cluster-exported bigWigs and the supplied cell-type definitions are available through the links below.",
       "featured": true,
       "cardTitle": "Human Chromatin Accessibility Atlas",
-      "label": "HUMAN ATLAS",
+      "label": "Human atlas",
       "icon": "species-human.svg",
       "metrics": [
         [
