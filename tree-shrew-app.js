@@ -1,5 +1,6 @@
 import igv from './human-igv.js';
 const $ = selector => document.querySelector(selector);
+const DEFAULT_SIGNAL_TRACK_HEIGHT = 50;
 let browser, manifest, genes = [], tracks = [], geneLookup = new Map();
 const active = new Map();
 let changingTracks = false, navigating = false;
@@ -69,6 +70,7 @@ function signalConfig(t) {
   const { filename, group, normalization, defaultVisible, local, bytes, ...config } = t;
   config.name = `${t.id} · ${t.name}`;
   config.removable = false; config.min = 0;
+  config.height = DEFAULT_SIGNAL_TRACK_HEIGHT;
   const mode = $('#scale-mode').value;
   config.autoscale = mode !== 'fixed';
   if (mode === 'shared') config.autoscaleGroup = manifest.resourceId+'-visible-signals';
@@ -190,7 +192,7 @@ $('#local-files').onchange = async event => {
   await changeTracks(async () => {
     for (const file of files) {
       if (!/\.(bw|bigwig)$/i.test(file.name)) throw Error('Choose a .bw or .bigWig file aligned to '+manifest.assembly+'.');
-      const t = {id:'LOCAL-' + (tracks.filter(t => t.local).length + 1), name:file.name.replace(/\.(bw|bigwig)$/i,''), url:file, group:'Added this session', local:true, type:'wig', format:'bigwig', color:'#8d80b1', height:140, order:tracks.length + 1};
+      const t = {id:'LOCAL-' + (tracks.filter(t => t.local).length + 1), name:file.name.replace(/\.(bw|bigwig)$/i,''), url:file, group:'Added this session', local:true, type:'wig', format:'bigwig', color:'#8d80b1', height:DEFAULT_SIGNAL_TRACK_HEIGHT, order:tracks.length + 1};
       tracks.push(t); await addTrack(t);
     }
   });
