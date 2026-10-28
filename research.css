@@ -1,0 +1,22 @@
+/* Research content for the laboratory homepage and Research page. */
+.lab-site .home-research>p{max-width:820px;margin-bottom:18px}
+.lab-site .research-overview{list-style:none;margin:0;padding:0}
+.lab-site .research-overview li{display:grid;grid-template-columns:minmax(240px,1fr) minmax(0,2fr);gap:32px;padding:18px 0;border-top:1px solid #dce1e5;align-items:baseline}
+.lab-site .research-overview h3{font-size:18px;line-height:1.45;margin:0;font-weight:600}
+.lab-site .research-overview h3 a{text-decoration:none}
+.lab-site .research-overview h3 a:hover{text-decoration:underline;text-underline-offset:3px}
+.lab-site .research-overview p{font-size:15px;line-height:1.75;margin:0}
+.lab-site .research-content>.lead{max-width:900px;margin:0 0 30px}
+.lab-site .research-directions{border-top:1px solid #dce1e5}
+.lab-site .research-direction{display:grid;grid-template-columns:minmax(230px,1fr) minmax(0,2fr);gap:44px;padding:30px 0;border-bottom:1px solid #dce1e5;scroll-margin-top:28px}
+.lab-site .research-direction h2{font-size:21px;line-height:1.45;margin:0}
+.lab-site .research-direction p{font-size:16px;line-height:1.8;margin:0}
+.lab-site .research-direction-links{display:flex;flex-wrap:wrap;gap:12px 25px;margin-top:16px;font-size:15px}
+.lab-site .research-direction-links a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:740px){
+ .lab-site .research-overview li,.lab-site .research-direction{grid-template-columns:1fr;gap:10px}
+ .lab-site .research-overview li{padding:18px 0}
+ .lab-site .research-direction{padding:25px 0}
+ .lab-site .research-direction h2{font-size:20px}
+ .lab-site .research-direction p{font-size:16px;line-height:1.8}
+}

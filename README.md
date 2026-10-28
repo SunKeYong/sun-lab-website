@@ -4,4 +4,4 @@ English-language laboratory website for Keyong Sun, Suzhou Institute of Systems 
 
 Hosted with GitHub Pages from the main branch root. Website updates publish automatically.
 
-Edit site.json to update project resource links and status; publications.json stores the publication list. Team profiles and photographs are included. Research descriptions will be added later.
+Edit site.json to update project resource links and status; publications.json stores the publication list. Five research directions, team profiles and photographs are included.
