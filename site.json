@@ -3,17 +3,17 @@
   "research": [
     {
       "id": "single-cell-methods",
-      "title": "Single-cell multi-omics technology development",
-      "shortTitle": "Single-cell methods",
-      "summary": "Developing scRNA-seq, scATAC-seq and single-cell CUT&Tag technologies.",
-      "description": "We develop new single-cell multi-omics sequencing methods, with a focus on scRNA-seq, scATAC-seq and single-cell CUT&Tag. These technologies provide the experimental basis for studying gene expression, chromatin accessibility and chromatin-associated features across cell states and biological contexts."
+      "title": "Single-cell technologies",
+      "shortTitle": "Single-cell technologies",
+      "summary": "Developing single-cell RNA-seq, ATAC-seq and CUT&Tag technologies.",
+      "description": "We develop single-cell RNA-seq, ATAC-seq and CUT&Tag technologies to measure transcriptional and epigenetic variation in complex tissues. Technology development is driven by biological questions, with an emphasis on scalable profiling and measurements that help resolve cell states and their regulatory programs."
     },
     {
       "id": "comparative-atlases",
-      "title": "Comparative atlases across development and adulthood",
-      "shortTitle": "Evolution and comparative atlases",
-      "summary": "Mapping embryonic and adult cell states to compare regulatory mechanisms across species.",
-      "description": "We build single-cell multi-omics atlases of embryonic and adult tissues across species. By comparing cellular states and regulatory landscapes, we seek to identify conserved and species-specific mechanisms of gene regulation and understand how they have changed during evolution.",
+      "title": "Comparative cell atlases",
+      "shortTitle": "Comparative cell atlases",
+      "summary": "Comparing cell identities and regulatory programs across species, from embryos to adult tissues.",
+      "description": "We build single-cell multi-omics atlases of embryonic and adult tissues across species. These maps let us compare cell identities, developmental trajectories and regulatory programs, and ask which features are conserved and which are species-specific. The aim is to understand how cellular diversity and gene regulation have changed over evolution.",
       "links": [
         {
           "label": "Human atlas",
@@ -26,25 +26,25 @@
       ]
     },
     {
-      "id": "chronic-stress",
-      "title": "Chronic stress and epigenetic remodeling",
-      "shortTitle": "Chronic stress and epigenetics",
-      "summary": "Understanding cellular remodeling under obesity, hypertension and sleep deprivation.",
-      "description": "We map how sustained physiological stresses, including obesity, hypertension and sleep deprivation, reshape cellular epigenetic states. We investigate whether and how these changes alter cell function and disease susceptibility, including possible links to tumor development."
+      "id": "enhancer-function",
+      "title": "Enhancer evolution",
+      "shortTitle": "Enhancer evolution",
+      "summary": "Investigating how enhancer sequences and activities are conserved or diverge across species.",
+      "description": "We ask how changes in enhancer sequence preserve or alter regulatory function across species. We combine comparative epigenomics with sequence-to-function approaches, including ChromBPNet and CREsted, to develop hypotheses about regulatory sequence evolution. Massively parallel reporter assays (MPRA) and other functional experiments test these hypotheses in relevant cellular contexts."
     },
     {
-      "id": "enhancer-function",
-      "title": "Deep learning and functional enhancer genomics",
-      "shortTitle": "Enhancer function",
-      "summary": "Combining deep learning with MPRA and functional genomics across biological contexts.",
-      "description": "We combine sequence-to-function modeling with ChromBPNet and CREsted, massively parallel reporter assays (MPRAs), and other functional genomics approaches. We aim to understand how enhancer activity depends on sequence and cellular context, and to test enhancer function across biological conditions."
+      "id": "chronic-stress",
+      "title": "Chronic stress and the epigenome",
+      "shortTitle": "Chronic stress and the epigenome",
+      "summary": "Understanding how persistent stress remodels the epigenome and influences tissue function.",
+      "description": "We investigate how persistent physiological stress remodels the epigenome across cell types and tissues. Our interests span metabolic, inflammatory and other chronic challenges, with obesity, hypertension and sleep deprivation among the contexts we examine. We ask how stress-associated regulatory changes affect tissue function, whether they persist, and how they relate to disease susceptibility, including tumor development."
     },
     {
       "id": "immune-recognition",
-      "title": "MHC-I–peptide–TCR recognition",
-      "shortTitle": "MHC-I–peptide–TCR recognition",
-      "summary": "Studying immune recognition to inform efforts to reduce therapeutic protein immunogenicity.",
-      "description": "We study the interaction rules that govern peptide presentation by MHC class I (MHC-I) and recognition by T-cell receptors (TCRs). We aim to use these insights to reduce unwanted MHC-I-mediated immune responses to exogenous proteins used in therapy."
+      "title": "Immune recognition and protein immunogenicity",
+      "shortTitle": "Immune recognition",
+      "summary": "Understanding MHC-I–peptide–TCR interactions to guide efforts to reduce therapeutic protein immunogenicity.",
+      "description": "We study how MHC class I molecules present peptides and how T-cell receptors recognize these peptide–MHC complexes. By investigating the rules of MHC-I–peptide–TCR interactions, we aim to understand unwanted T-cell responses to exogenous proteins and inform strategies for reducing their immunogenicity in therapeutic use."
     }
   ],
   "members": [
@@ -167,11 +167,10 @@
       "featured": false
     }
   ],
-  "homeTagline": "Single-cell multi-omics and gene regulation",
+  "homeTagline": "Single-cell genomics and regulatory evolution",
   "homeIntroduction": [
-    "We develop single-cell multi-omics technologies to study how cells regulate their genomes. Our research spans comparative atlases of embryonic and adult tissues, epigenetic responses to chronic stress, and the function of regulatory DNA.",
-    "We combine experimental genomics, deep learning and functional assays, and investigate MHC-I–peptide–TCR recognition to guide efforts to reduce unwanted immune responses to therapeutic proteins."
+    "We develop single-cell technologies to study how gene regulation shapes cell identity during development, across species and under persistent physiological stress. We build comparative cell atlases and combine deep learning with functional experiments to understand how regulatory changes affect cell function."
   ],
-  "researchIntroduction": "We develop and apply single-cell multi-omics technologies to understand cell states and gene regulation. Our research combines comparative biology, models of regulatory DNA, functional experiments and studies of immune recognition.",
-  "researchMetaDescription": "Sun Lab develops single-cell multi-omics methods to study evolution, chronic stress, enhancer function and MHC-I–peptide–TCR recognition."
+  "researchIntroduction": "We connect single-cell technology development with questions about cell identity, regulatory evolution and responses to persistent stress. We also study the molecular basis of immune recognition, with a focus on therapeutic protein immunogenicity.",
+  "researchMetaDescription": "Sun Lab develops single-cell technologies and comparative atlases to study enhancer evolution, chronic stress and the molecular basis of immune recognition."
 }
