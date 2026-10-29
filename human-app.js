@@ -1,9 +1,11 @@
 import igv from './human-igv.js';
+import { inspectLocalBed } from './local-bed.js?v=20261029-local-bed';
 const $ = selector => document.querySelector(selector);
 const DEFAULT_SIGNAL_TRACK_HEIGHT = 50;
 let browser, manifest, genes = [], tracks = [], geneLookup = new Map();
 const active = new Map();
-let changingTracks = false, navigating = false;
+let changingTracks = false, navigating = false, localTrackSequence = 0;
+const isInterval = track => track.type === 'annotation';
 
 function notice(message = '') {
   $('#notice').textContent = message;
@@ -14,8 +16,18 @@ function setStatus(message, state = 'ready') {
   $('#load-status').className = 'status ' + state;
 }
 function readyStatus() {
-  setStatus(`${active.size} signal track${active.size === 1 ? '' : 's'} active`);
-  $('#active-summary').textContent = active.size ? `${active.size} visible cell type${active.size === 1 ? '' : 's'} · cluster CPM signals` : 'No signal tracks selected';
+  const signals = tracks.filter(t => !isInterval(t) && active.has(t.id));
+  const intervals = tracks.filter(t => isInterval(t) && active.has(t.id));
+  const signalText = `${signals.length} signal track${signals.length === 1 ? '' : 's'}`;
+  const bedText = intervals.length ? ` + ${intervals.length} BED track${intervals.length === 1 ? '' : 's'}` : '';
+  setStatus(signalText + bedText + ' active');
+  const atlasCount = signals.filter(t => !t.local).length;
+  const localCount = signals.length - atlasCount;
+  const summary = [];
+  if (atlasCount) summary.push(`${atlasCount} cell type${atlasCount === 1 ? '' : 's'} · cluster CPM signals`);
+  if (localCount) summary.push(`${localCount} local bigWig track${localCount === 1 ? '' : 's'}`);
+  if (intervals.length) summary.push(`${intervals.length} local BED track${intervals.length === 1 ? '' : 's'}`);
+  $('#active-summary').textContent = summary.join(' · ') || 'No data tracks selected';
 }
 function syncRegion() {
   if (!browser) return;
@@ -38,7 +50,7 @@ function renderTracks() {
   const box = $('#track-list');
   box.replaceChildren();
   const query = $('#cell-search').value.toLowerCase();
-  const shown = tracks.filter(t => `${t.id} ${t.name} ${t.group}`.toLowerCase().includes(query));
+  const shown = tracks.filter(t => !isInterval(t) && `${t.id} ${t.name} ${t.group}`.toLowerCase().includes(query));
   for (const group of new Set(shown.map(t => t.group || 'Other'))) {
     const heading = document.createElement('p');
     heading.className = 'track-group'; heading.textContent = group; box.append(heading);
@@ -62,14 +74,42 @@ function renderTracks() {
     }
   }
   if (!shown.length) { const p = document.createElement('p'); p.textContent = 'No matching cell types.'; box.append(p); }
-  $('#catalog-count').textContent = tracks.length;
-  $('#connected-count').textContent = tracks.length;
-  for (const id of ['select-all', 'clear-all', 'scale-mode', 'apply-scale', 'local-files']) $( '#' + id).disabled = !browser || changingTracks;
+  const atlasCount = tracks.filter(t => !t.local).length;
+  $('#catalog-count').textContent = atlasCount;
+  $('#connected-count').textContent = atlasCount;
+  for (const id of ['select-all', 'clear-all', 'scale-mode', 'apply-scale', 'local-files', 'local-bed-files', 'add-local-bigwig', 'add-local-bed']) $('#' + id).disabled = !browser || changingTracks;
+  renderIntervalTracks();
 }
-function signalConfig(t) {
-  const { filename, group, normalization, defaultVisible, local, bytes, ...config } = t;
-  config.name = `${t.id} · ${t.name}`;
-  config.removable = false; config.min = 0;
+function renderIntervalTracks() {
+  const box = $('#local-bed-list'); box.replaceChildren();
+  const intervals = tracks.filter(isInterval);
+  $('#local-bed-section').hidden = !intervals.length;
+  for (const t of intervals) {
+    const row = document.createElement('div'); row.className = 'local-bed-item';
+    const label = document.createElement('label'); label.className = 'track-item' + (active.has(t.id) ? '' : ' off');
+    const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.checked = active.has(t.id); checkbox.disabled = changingTracks;
+    checkbox.setAttribute('aria-label', t.name + ' BED track');
+    checkbox.onchange = () => changeTracks(async () => { if (checkbox.checked) await addTrack(t); else removeTrack(t); });
+    const info = document.createElement('span'); info.className = 'track-info';
+    const name = document.createElement('strong'); const color = document.createElement('i'); color.className = 'track-color'; color.style.background = t.color;
+    name.append(color, document.createTextNode(t.name));
+    const detail = document.createElement('small'); detail.textContent = `${t.intervalCount.toLocaleString()} intervals · ${manifest.assembly}`;
+    info.append(name, detail); label.append(checkbox, info);
+    const actions = document.createElement('div'); actions.className = 'local-bed-actions';
+    const go = document.createElement('button'); go.type = 'button'; go.textContent = 'Go to first interval'; go.disabled = changingTracks;
+    go.onclick = () => navigate(t.firstLocus);
+    const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Remove'; remove.disabled = changingTracks;
+    remove.setAttribute('aria-label', 'Remove ' + t.name + ' BED track');
+    remove.onclick = () => changeTracks(async () => { removeTrack(t); tracks = tracks.filter(track => track.id !== t.id); });
+    actions.append(go, remove); row.append(label, actions); box.append(row);
+  }
+}
+function trackConfig(t) {
+  const { filename, group, normalization, defaultVisible, local, bytes, intervalCount, firstLocus, ...config } = t;
+  config.name = isInterval(t) ? t.name : `${t.id} · ${t.name}`;
+  config.removable = false;
+  if (isInterval(t)) return config;
+  config.min = 0;
   config.height = DEFAULT_SIGNAL_TRACK_HEIGHT;
   const mode = $('#scale-mode').value;
   config.autoscale = mode !== 'fixed';
@@ -79,8 +119,8 @@ function signalConfig(t) {
 }
 async function addTrack(t) {
   if (active.has(t.id)) return;
-  const [loaded] = await browser.loadTrackList([signalConfig(t)]);
-  if (!loaded) throw new Error('The signal track could not be created: ' + t.name);
+  const [loaded] = await browser.loadTrackList([trackConfig(t)]);
+  if (!loaded) throw new Error('The track could not be created: ' + t.name);
   active.set(t.id, loaded);
 }
 function removeTrack(t) {
@@ -89,14 +129,14 @@ function removeTrack(t) {
 }
 async function changeTracks(action) {
   if (!browser || changingTracks) return;
-  changingTracks = true; renderTracks(); setStatus('Updating signal tracks…', 'loading');
-  try { await action(); await browser.updateViews(); notice(); readyStatus(); }
+  changingTracks = true; renderTracks(); setStatus('Updating tracks…', 'loading');
+  try { const message = await action(); await browser.updateViews(); notice(typeof message === 'string' ? message : ''); readyStatus(); }
   catch (error) { console.error(error); notice('Unable to update tracks. ' + error.message); setStatus('Track loading failed', 'error'); }
   finally { changingTracks = false; renderTracks(); }
 }
 $('#cell-search').oninput = renderTracks;
-$('#select-all').onclick = () => changeTracks(async () => { const q=$('#cell-search').value.toLowerCase(); for (const t of tracks.filter(t=>`${t.id} ${t.name} ${t.group}`.toLowerCase().includes(q))) await addTrack(t); });
-$('#clear-all').onclick = () => changeTracks(async () => { for (const t of tracks) removeTrack(t); });
+$('#select-all').onclick = () => changeTracks(async () => { const q=$('#cell-search').value.toLowerCase(); for (const t of tracks.filter(t=>!isInterval(t) && `${t.id} ${t.name} ${t.group}`.toLowerCase().includes(q))) await addTrack(t); });
+$('#clear-all').onclick = () => changeTracks(async () => { for (const t of tracks.filter(t => !isInterval(t))) removeTrack(t); });
 
 function locusForGene(g) {
   return `${g.chr}:${Math.max(1, g.start - 10000)}-${Math.min(manifest.chromosomes[g.chr], g.end + 10000)}`;
@@ -155,7 +195,8 @@ async function applyScale() {
   if ($('#scale-mode').value === 'fixed' && (!Number.isFinite(max) || max <= 0)) { notice('The fixed maximum must be greater than zero.'); return; }
   await changeTracks(async () => {
     const mode = $('#scale-mode').value;
-    for (const loaded of active.values()) {
+    for (const t of tracks.filter(t => !isInterval(t) && active.has(t.id))) {
+      const loaded = active.get(t.id);
       loaded.autoscaleGroup = mode === 'shared' ? manifest.resourceId+'-visible-signals' : undefined;
       loaded.autoscale = mode !== 'fixed';
       if (mode === 'fixed') loaded.dataRange = {min:0, max};
@@ -187,17 +228,39 @@ $('#share-locus').onclick = async () => {
   try { await navigator.clipboard.writeText(url.href); $('#share-locus').textContent = 'Copied ✓'; setTimeout(() => $('#share-locus').textContent = 'Copy link ↗', 2000); }
   catch { notice('Current view: ' + url.href); }
 };
-$('#local-files').onchange = async event => {
+$('#add-local-bigwig').onclick = () => $('#local-files').click();
+$('#add-local-bed').onclick = () => $('#local-bed-files').click();
+async function importLocalFiles(event, kind) {
   const files = [...event.target.files];
+  if (!files.length) return;
   await changeTracks(async () => {
+    let added = 0;
+    const failures = [];
     for (const file of files) {
-      if (!/\.(bw|bigwig)$/i.test(file.name)) throw Error('Choose a .bw or .bigWig file aligned to '+manifest.assembly+'.');
-      const t = {id:'LOCAL-' + (tracks.filter(t => t.local).length + 1), name:file.name.replace(/\.(bw|bigwig)$/i,''), url:file, group:'Added this session', local:true, type:'wig', format:'bigwig', color:'#8d80b1', height:DEFAULT_SIGNAL_TRACK_HEIGHT, order:tracks.length + 1};
-      tracks.push(t); await addTrack(t);
+      try {
+        setStatus(`Reading ${file.name}…`, 'loading');
+        let t;
+        const id = 'LOCAL-' + (++localTrackSequence);
+        if (kind === 'bed') {
+          const details = await inspectLocalBed(file, manifest.chromosomes, manifest.assembly);
+          t = {id, ...details, url:file, group:'Local intervals', local:true, type:'annotation', indexed:false,
+            color:['#b5673d','#6f60a8','#397b73','#a34d78'][(localTrackSequence - 1) % 4],
+            height:60, minHeight:30, maxHeight:200, autoHeight:false, displayMode:'EXPANDED', expandedRowHeight:18, maxRows:100, order:tracks.length + 1};
+        } else {
+          if (!/\.(bw|bigwig)$/i.test(file.name)) throw Error('Choose a .bw or .bigWig file aligned to '+manifest.assembly+'.');
+          t = {id, name:file.name.replace(/\.(bw|bigwig)$/i,''), url:file, group:'Added this session', local:true, type:'wig', format:'bigwig', color:'#8d80b1', height:DEFAULT_SIGNAL_TRACK_HEIGHT, order:tracks.length + 1};
+        }
+        await addTrack(t); tracks.push(t); added++;
+      } catch (error) { failures.push(`${file.name}: ${error.message}`); }
     }
+    const message = `${added} local ${kind === 'bed' ? 'BED' : 'bigWig'} track${added === 1 ? '' : 's'} added.`;
+    if (!added && failures.length) throw Error(failures.join(' '));
+    return message + (failures.length ? ' Could not add: ' + failures.join(' ') : '');
   });
   event.target.value = '';
-};
+}
+$('#local-files').onchange = event => importLocalFiles(event, 'bigwig');
+$('#local-bed-files').onchange = event => importLocalFiles(event, 'bed');
 async function getJSON(url) { const r = await fetch(url, {cache:'no-cache'}); if (!r.ok) throw Error('Data connection unavailable (' + r.status + ').'); return r.json(); }
 async function init() {
   $('#go').disabled = true;
