@@ -265,6 +265,22 @@ async function importLocalFiles(event, kind) {
 $('#local-files').onchange = event => importLocalFiles(event, 'bigwig');
 $('#local-bed-files').onchange = event => importLocalFiles(event, 'bed');
 async function getJSON(url) { const r = await fetch(url, {cache:'no-cache'}); if (!r.ok) throw Error('Data connection unavailable (' + r.status + ').'); return r.json(); }
+// Keep transcript identifiers in feature details; simplify only the drawn labels.
+function simplifyReferenceGeneLabels() {
+  const annotation = browser.trackViews.find(view => view.track.id === 'atlas-reference-genes')?.track;
+  if (!annotation || typeof annotation.render !== 'function') throw Error('The reference gene annotation could not be configured.');
+  const nativeRender = annotation.render;
+  annotation.config.labelField = 'atlasGeneSymbol';
+  annotation.render = function(feature, ...args) {
+    if (!Object.hasOwn(feature, 'atlasGeneSymbol')) {
+      Object.defineProperty(feature, 'atlasGeneSymbol', {
+        value:String(feature.name || '').split('|', 1)[0], enumerable:false, configurable:true
+      });
+    }
+    return nativeRender.call(this, feature, ...args);
+  };
+  annotation.repaintViews();
+}
 async function init() {
   $('#go').disabled = true;
   try {
@@ -290,8 +306,9 @@ async function init() {
       reference:manifest.reference, loadDefaultGenomes:false, genomeList:[], locus,
       showNavigation:true, showIdeogram:false, showSVGButton:false, showRuler:true, showAllChromosomes:false, showCenterGuide:true,
       search:{url:new URL('api/search', new URL(manifest.dataBase, location.href)).href + '?name=$FEATURE$', chromosomeField:'chr', startField:'start', endField:'end', coords:1},
-      tracks:[manifest.annotation]
+      tracks:[{...manifest.annotation, id:'atlas-reference-genes'}]
     });
+    simplifyReferenceGeneLabels();
     browser.on('locuschange', syncRegion); syncRegion(); $('#locus-input').value = params.get('locus') || manifest.initialLocus;
     const selected = params.has('tracks') ? params.get('tracks').split(',') : tracks.filter(t => t.defaultVisible).map(t => t.id);
     await changeTracks(async () => { for (const t of tracks.filter(t => selected.includes(t.id))) await addTrack(t); });
