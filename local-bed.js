@@ -1,6 +1,9 @@
+import { inspectLocalBigBed } from './local-bigbed.js?v=20261029-bigbed';
+
 // Validate local interval files before handing the original File to IGV.js.
 // Reads a line at a time so validation does not retain the complete BED text.
 export function localBedFormat(name) {
+  if (/\.(bb|bigbed)$/i.test(String(name))) return 'bigbed';
   const match = String(name).match(/\.(bed|narrowpeak|broadpeak)(?:\.gz)?$/i);
   return match?.[1].toLowerCase();
 }
@@ -9,7 +12,8 @@ class LocalBedError extends Error {}
 
 export async function inspectLocalBed(file, chromosomes, assembly) {
   const format = localBedFormat(file?.name);
-  if (!format) throw new LocalBedError('Choose a .bed, .narrowPeak or .broadPeak file, optionally compressed as .gz.');
+  if (!format) throw new LocalBedError('Choose a .bed, .bb, .bigBed, .narrowPeak or .broadPeak file; BED and peak text files may be compressed as .gz.');
+  if (format === 'bigbed') return inspectLocalBigBed(file, chromosomes, assembly);
   const filename = String(file.name);
   const fail = (line, message) => {
     throw new LocalBedError(`${filename}, line ${line.toLocaleString()}: ${message}`);
