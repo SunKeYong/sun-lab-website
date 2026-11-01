@@ -1,0 +1,16 @@
+/* Homepage research illustration and introduction. */
+.lab-home.home-illustrated{display:block;padding:42px 32px 36px}
+.home-illustrated .home-heading .home-subtitle{max-width:none;margin-bottom:0}
+.lab-home.home-illustrated figure.home-banner{max-width:none;margin:24px 0 28px;width:100%}
+.home-illustrated .home-banner img{display:block;width:100%;height:auto}
+.home-illustrated .home-overview{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(240px,.9fr);gap:48px;align-items:start}
+.home-illustrated .home-summary p:last-child{margin-bottom:0}
+.home-illustrated .home-information{padding-left:28px;border-left:1px solid #dce1e5}
+.home-illustrated .home-information .home-affiliation{margin:0 0 16px;font-size:14px}
+.home-illustrated .home-links{gap:10px 18px;font-size:14px}
+@media(max-width:740px){
+ .lab-home.home-illustrated{padding:28px 22px 30px}
+ .lab-home.home-illustrated figure.home-banner{margin:22px 0 24px}
+ .home-illustrated .home-overview{grid-template-columns:1fr;gap:22px}
+ .home-illustrated .home-information{border-left:0;border-top:1px solid #dce1e5;padding:18px 0 0}
+}
