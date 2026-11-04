@@ -1,0 +1,365 @@
+/* Sun Lab identity shared by the laboratory and both atlas portals. */
+:root {
+  --academic-font: "Avenir Next", "Segoe UI", Arial, sans-serif;
+  --ink: #000;
+  --white: #fff;
+  --line: #cdd9e1;
+  --pale: #eef4f7;
+  --human: #184e78;
+  --tree: #146357;
+  --accent: var(--human);
+  --blue: var(--accent);
+  --gutter: clamp(18px, 3.5vw, 48px);
+}
+.atlas-tree-shrew, .atlas-resource.tree-shrew, .dataset-entry.tree-shrew {
+  --accent: var(--tree);
+}
+body { line-height: 1.6; }
+p { line-height: 1.65; }
+a, .text-link { color: var(--accent); text-underline-offset: .19em; }
+:is(a, button, input, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.skip-link {
+  position: fixed;
+  z-index: 20;
+  top: 8px;
+  left: var(--gutter);
+  padding: 10px 16px;
+  background: var(--white);
+  color: var(--accent);
+  transform: translateY(-150%);
+}
+.skip-link:focus { transform: none; }
+.button, .primary, .gs-primary {
+  border-color: var(--accent);
+  border-radius: 5px;
+  background: var(--accent);
+  font-weight: 600;
+}
+.button:hover, .primary:hover, .gs-primary:hover {
+  background: var(--accent);
+  text-decoration: underline;
+}
+
+/* Lab pages */
+.lab-site :is(header, main, footer) { max-width: 1280px; }
+.lab-site :is(header, footer, .page-head, .section, .home-section, .lab-home.home-illustrated) {
+  padding-inline: var(--gutter);
+}
+.lab-site header {
+  min-height: 84px;
+  border-color: var(--line);
+}
+.lab-site header .brand { font-size: 24px; font-weight: 700; }
+.lab-site header .brand small { font-size: 13px; }
+.lab-site header nav { gap: clamp(16px, 2.6vw, 32px); }
+.lab-site header nav a { font-weight: 500; }
+.lab-site nav a[aria-current="page"] { color: var(--accent); }
+.lab-site nav a[aria-current="page"]::after { background: var(--accent); }
+.lab-site .page-head, .lab-site .page-head:has(+ .resources-content) {
+  padding-top: clamp(30px, 4.6vw, 64px);
+  padding-bottom: 16px;
+}
+.lab-site .page-head h1 { font-size: clamp(34px, 4.1vw, 53px); line-height: 1.12; }
+.lab-site .lead { max-width: 68ch; }
+.lab-site .lab-home.home-illustrated { padding-top: clamp(26px, 3.5vw, 52px); }
+.lab-site .home-heading h1 {
+  max-width: 19ch;
+  margin: 0;
+  font-size: clamp(35px, 4.8vw, 67px);
+  line-height: 1.04;
+  letter-spacing: -.044em;
+  text-wrap: balance;
+}
+.home-illustrated .home-heading .home-affiliation {
+  margin: 15px 0 0;
+  font-size: 15px;
+}
+.lab-home.home-illustrated figure.home-banner {
+  margin: clamp(20px, 2.4vw, 34px) 0 26px;
+}
+.home-illustrated .home-banner img {
+  border-radius: 6px;
+}
+.home-illustrated .home-overview {
+  grid-template-columns: minmax(0, 3fr) minmax(175px, 1fr);
+  gap: clamp(18px, 4vw, 56px);
+}
+.home-illustrated .home-summary p {
+  max-width: 68ch;
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.65;
+}
+.lab-site nav.home-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 0;
+  padding-left: 20px;
+  border-left: 1px solid var(--line);
+}
+.lab-site nav.home-links a { color: var(--accent); padding: 3px 0; }
+.lab-site .home-section {
+  padding-block: clamp(24px, 3vw, 44px);
+  border-color: var(--line);
+}
+.lab-site .home-data {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr);
+  gap: clamp(22px, 5vw, 74px);
+  background: var(--pale);
+}
+.home-data h2 { margin-bottom: 8px; }
+.home-data > div p { max-width: 37ch; margin: 0 0 13px; }
+.home-data ul { display: grid; gap: 19px; list-style: none; margin: 0; padding: 0; }
+.dataset-entry { border-left: 3px solid var(--accent); padding: 0 0 0 16px; }
+.lab-site .dataset-entry h3 { margin: 0 0 4px; font-size: 19px; line-height: 1.35; }
+.dataset-entry a { color: var(--accent); text-decoration: underline; }
+.dataset-entry p { margin: 0; font-size: 15px; }
+.lab-site .research-direction { border-color: var(--line); padding-block: 27px; }
+.lab-site .research-direction p { max-width: 68ch; }
+.lab-site .research-overview li { border-color: var(--line); }
+.lab-site .research-overview a { color: var(--accent); }
+.lab-site .location { margin: 0 0 8px; font-size: 14px; }
+.lab-site .member-portrait img { border-radius: 4px; }
+
+.lab-site .resources-content { padding-top: 0; }
+.lab-site .resource-intro { margin-bottom: 28px; }
+.atlas-resource-list { display: grid; gap: 24px; }
+.lab-site .atlas-resource-list .atlas-resource {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) minmax(165px, .37fr);
+  gap: clamp(18px, 3vw, 42px);
+  align-items: start;
+  padding: clamp(20px, 3vw, 38px);
+  border: 0;
+  border-inline-start: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  background: var(--pale);
+}
+.atlas-resource-list .species-icon { width: 62px; height: 62px; }
+.lab-site .resource-info h2 {
+  min-height: 0;
+  margin: 0 0 10px;
+  max-width: none;
+  font-size: clamp(22px, 2.45vw, 31px);
+  line-height: 1.2;
+}
+.resource-info > p { margin: 0 0 18px; max-width: 64ch; }
+.lab-site .resource-info .resource-actions { gap: 10px 18px; }
+.lab-site .resource-info .resource-actions .button {
+  background: var(--accent);
+  border-color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 13px;
+}
+.resource-metadata {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+}
+.resource-metadata > div { display: flex; flex-direction: column-reverse; }
+.resource-metadata dt { font-size: 13px; }
+.resource-metadata dd { margin: 0; color: var(--accent); font-size: 20px; font-weight: 600; }
+
+/* Atlas identity, section navigation and figure overview */
+.atlas-site :is(header, main, footer) { max-width: 1510px; }
+.atlas-site header.atlas-header {
+  display: block;
+  min-height: 0;
+  padding: 0 var(--gutter);
+  border-color: var(--line);
+}
+.atlas-site main { padding-inline: var(--gutter); }
+.atlas-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.atlas-breadcrumb { display: flex; align-items: center; gap: 15px; }
+.atlas-site .atlas-breadcrumb .brand {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.atlas-breadcrumb > a + a { border-left: 1px solid var(--line); padding-left: 15px; }
+.atlas-topline a { color: var(--accent); font-size: 14px; }
+.atlas-switch { text-decoration: underline; }
+.atlas-site .project-heading {
+  display: block;
+  padding: 24px 0 15px;
+  border: 0;
+}
+.atlas-site .project-heading h1 {
+  margin: 0 0 6px;
+  font-size: clamp(25px, 3.2vw, 44px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+.atlas-identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 18px;
+  margin: 0;
+  font-size: 14px;
+}
+.atlas-site .atlas-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 clamp(16px, 3vw, 40px);
+  margin: 0;
+  height: auto;
+  padding: 0;
+}
+.atlas-site .atlas-header nav a {
+  padding: 9px 0 12px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+.atlas-site .atlas-header nav a.active { color: var(--accent); font-weight: 650; }
+.atlas-site .atlas-header nav a.active::after {
+  bottom: 0;
+  height: 3px;
+  background: var(--accent);
+}
+.atlas-site .content-panel { padding-top: clamp(23px, 3vw, 40px); }
+.atlas-site .atlas-overview-intro h2 {
+  max-width: 32ch;
+  margin: 0 0 10px;
+  font-size: clamp(25px, 3vw, 37px);
+  line-height: 1.16;
+  letter-spacing: -.023em;
+}
+.atlas-overview-intro p { max-width: 65ch; margin: 0 0 18px; }
+.atlas-entry-actions { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; }
+.atlas-entry-actions a { color: var(--accent); font-size: 15px; text-decoration: underline; }
+.atlas-site .human-overview:not([hidden]) {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(25px, 4vw, 62px);
+  align-items: start;
+}
+.atlas-site .human-overview .atlas-overview-figure {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: white;
+  min-width: 0;
+}
+.atlas-site .human-overview .atlas-overview-figure img { width: 100%; }
+.atlas-site .topa-stats {
+  padding: clamp(16px, 2.5vw, 32px);
+  background: var(--pale);
+  border: 0;
+  border-radius: 7px;
+}
+.atlas-site .topa-stats strong {
+  color: var(--accent);
+  font-size: clamp(25px, 3vw, 39px);
+  font-variant-numeric: tabular-nums;
+}
+.atlas-site .topa-study small { text-transform: none; }
+.atlas-site .topa-landscapes { border-top: 1px solid var(--line); padding-top: 24px; }
+.atlas-site .topa-landscapes figcaption { max-width: 62ch; }
+
+/* Data tools: prioritize locus, chart, and downloads. */
+.atlas-site .workspace {
+  grid-template-columns: minmax(215px, 282px) minmax(0, 1fr);
+  align-items: start;
+  min-height: 0;
+  margin-top: 20px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+}
+.atlas-site .sidebar {
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: var(--pale);
+  padding: 17px;
+}
+.atlas-site #track-list { max-height: min(45vh, 440px); }
+#track-picker-toggle { display: none; }
+.atlas-site .track-item { padding: 7px 8px; }
+.atlas-site .track-item input { accent-color: var(--accent); }
+.atlas-site .track-info strong { line-height: 1.4; }
+.atlas-site .browser-area { min-width: 0; padding: 18px 18px 0; }
+.atlas-site .browser-heading h2 { margin: 0; font-size: 24px; }
+.atlas-site .locus-form button { background: var(--accent); border-color: var(--accent); }
+.atlas-site .browser-tools { flex-wrap: wrap; }
+.atlas-site .browser-tools > div { flex-wrap: wrap; }
+.atlas-site #current-region { overflow-wrap: anywhere; }
+.atlas-site .gs-panel { padding-top: 24px; }
+.atlas-site .gs-search-card { background: var(--pale); border-color: var(--line); }
+.atlas-site .gs-result-heading .eyebrow, .atlas-site .gs-summary-card .eyebrow { text-transform: none; }
+.atlas-site .gs-chart-scroll, .atlas-site .track-download-scroll { overscroll-behavior-inline: contain; }
+.atlas-site :is(.data-table, .full-track-downloads) a { color: var(--accent); }
+.atlas-site .full-track-downloads { scroll-margin-top: 14px; }
+
+@media (max-width: 820px) {
+  .lab-site header { min-height: 0; flex-wrap: wrap; gap: 7px 24px; }
+  .lab-site header nav { width: auto; flex-wrap: wrap; margin: 0; }
+  .lab-site header nav a { padding: 6px 0; }
+  .lab-site .atlas-resource-list .atlas-resource { grid-template-columns: 45px minmax(0, 1fr); }
+  .atlas-resource-list .species-icon { width: 45px; height: 45px; }
+  .resource-metadata {
+    grid-column: 2;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 110px), 1fr));
+    padding: 10px 0 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+  .atlas-site .human-overview:not([hidden]) { grid-template-columns: 1fr; }
+}
+@media (max-width: 740px) {
+  .home-illustrated .home-overview, .lab-site .home-data { grid-template-columns: 1fr; }
+  .lab-site nav.home-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    width: auto;
+    padding: 0;
+    border: 0;
+  }
+  .lab-site .section { padding-bottom: 32px; }
+  .atlas-site .project-heading { padding-top: 16px; }
+  .atlas-site .atlas-header nav { width: 100%; }
+  .atlas-site .atlas-header nav a { font-size: 14px; }
+  .atlas-site .workspace { grid-template-columns: 1fr; margin-top: 14px; }
+  .atlas-site .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+  #track-picker-toggle {
+    display: block;
+    justify-self: stretch;
+    padding: 10px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 6px 6px 0 0;
+    color: var(--accent);
+    background: var(--pale);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  #track-picker-toggle[aria-expanded="false"] + #track-picker { display: none; }
+  .atlas-site #track-list { max-height: 190px; }
+  .atlas-site .browser-area { padding-inline: 10px; }
+  .atlas-site .atlas-overview-intro h2 { font-size: 25px; }
+  .atlas-site .topa-stats { gap: 15px; }
+}
+@media (max-width: 430px) {
+  .lab-site .atlas-resource-list .atlas-resource { grid-template-columns: 1fr; gap: 12px; }
+  .resource-metadata { grid-column: auto; }
+  .atlas-site .atlas-header nav { column-gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

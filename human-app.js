@@ -38,13 +38,38 @@ function syncRegion() {
 function activatePanel(name) {
   if (!['overview', 'tracks', 'genescore', 'data'].includes(name)) name = 'overview';
   document.querySelectorAll('.panel').forEach(el => el.hidden = el.id !== name + '-panel');
-  document.querySelectorAll('[data-tab]').forEach(el => el.classList.toggle('active', el.dataset.tab === name));
+  document.querySelectorAll('[data-tab]').forEach(el => {
+    const current = el.dataset.tab === name;
+    el.classList.toggle('active', current);
+    if (current) el.setAttribute('aria-current', 'page');
+    else el.removeAttribute('aria-current');
+  });
   if (name === 'tracks' && browser) browser.visibilityChange();
 }
+function activateLocation() {
+  const fragment = location.hash.slice(1);
+  if (fragment === 'main') return;
+  const target = document.getElementById(fragment);
+  const panel = target?.closest('.panel');
+  activatePanel(panel ? panel.id.replace(/-panel$/, '') : fragment);
+  if (panel) target.scrollIntoView();
+}
 document.querySelectorAll('[data-tab]').forEach(a => a.onclick = () => activatePanel(a.dataset.tab));
-document.querySelector('[data-open-tracks]').onclick = () => { location.hash = 'tracks'; activatePanel('tracks'); };
-window.addEventListener('hashchange', () => activatePanel(location.hash.slice(1)));
-activatePanel(location.hash.slice(1) || 'overview');
+document.querySelector('[data-open-tracks]').onclick = () => {
+  location.hash = 'tracks';
+  document.querySelector('[data-tab="tracks"]').focus();
+};
+window.addEventListener('hashchange', activateLocation);
+activateLocation();
+
+const trackPickerToggle = $('#track-picker-toggle');
+if (trackPickerToggle) {
+  trackPickerToggle.onclick = () => {
+    const expanded = trackPickerToggle.getAttribute('aria-expanded') === 'true';
+    trackPickerToggle.setAttribute('aria-expanded', String(!expanded));
+    trackPickerToggle.textContent = expanded ? 'Choose or add tracks' : 'Hide track picker';
+  };
+}
 
 function renderTracks() {
   const box = $('#track-list');
@@ -312,7 +337,8 @@ async function init() {
     browser.on('locuschange', syncRegion); syncRegion(); $('#locus-input').value = params.get('locus') || manifest.initialLocus;
     const selected = params.has('tracks') ? params.get('tracks').split(',') : tracks.filter(t => t.defaultVisible).map(t => t.id);
     await changeTracks(async () => { for (const t of tracks.filter(t => selected.includes(t.id))) await addTrack(t); });
-    $('#go').disabled = false; renderTracks(); activatePanel(location.hash.slice(1) || 'overview');
+    $('#go').disabled = false; renderTracks();
+    if (!$('#tracks-panel').hidden) browser.visibilityChange();
   } catch (error) {
     console.error(error); setStatus('Connection unavailable', 'error'); notice(error.message || String(error));
     const loading = $('#browser-loading');
